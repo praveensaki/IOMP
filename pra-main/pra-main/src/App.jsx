@@ -1,9 +1,82 @@
-import React, { useState, useEffect } from "react";
+// Full App.js code
+import React, { useState, useEffect } from 'react';
 import Login from "./Login";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-import "./App.css";
+import './App.css';
+
+const doctorDatabase = {
+  "fever": { specialty: "General Physician", doctors: ["Dr. Anil Sharma", "Dr. Rekha Singh"] },
+  "cold": { specialty: "General Physician", doctors: ["Dr. Sameer Iqbal", "Dr. Anjali Rao"] },
+  "cough": { specialty: "Pulmonologist", doctors: ["Dr. Ramesh Nair", "Dr. Sneha Joshi"] },
+  "diabetes": { specialty: "Endocrinologist", doctors: ["Dr. Vinay Desai", "Dr. Megha Kapoor"] },
+  "hypertension": { specialty: "Cardiologist", doctors: ["Dr. Alok Mehta", "Dr. Rajeev Jain"] },
+  "chest pain": { specialty: "Cardiologist", doctors: ["Dr. Rajesh Reddy", "Dr. Preeti Sinha"] },
+  "skin rash": { specialty: "Dermatologist", doctors: ["Dr. Maya Rao", "Dr. Vikram Patil"] },
+  "allergy": { specialty: "Allergist", doctors: ["Dr. Shalini Menon", "Dr. Harshad Kumar"] },
+  "eye pain": { specialty: "Ophthalmologist", doctors: ["Dr. Neha Verma", "Dr. Kiran Gupta"] },
+  "toothache": { specialty: "Dentist", doctors: ["Dr. Anurag Shetty", "Dr. Isha Arora"] },
+  "asthma": { specialty: "Pulmonologist", doctors: ["Dr. Kavita Ghosh", "Dr. Ravi Shastri"] },
+  "migraine": { specialty: "Neurologist", doctors: ["Dr. Swati Rao", "Dr. Deepak Bansal"] },
+  "back pain": { specialty: "Orthopedic", doctors: ["Dr. Arvind Krishnan", "Dr. Leena Das"] },
+  "joint pain": { specialty: "Rheumatologist", doctors: ["Dr. Varun Mittal", "Dr. Shreya Kapoor"] },
+  "infection": { specialty: "Infectious Disease", doctors: ["Dr. Rahul Joshi", "Dr. Nalini Prasad"] },
+  "vomiting": { specialty: "Gastroenterologist", doctors: ["Dr. Rakesh Rao", "Dr. Tanya Shah"] },
+  "diarrhea": { specialty: "Gastroenterologist", doctors: ["Dr. Mohan Naidu", "Dr. Rekha Bhat"] },
+  "ear pain": { specialty: "ENT Specialist", doctors: ["Dr. Meena Iyer", "Dr. Aditya Mohan"] },
+  "burn": { specialty: "Plastic Surgeon", doctors: ["Dr. K. Suresh", "Dr. Mala Menon"] },
+  "fracture": { specialty: "Orthopedic", doctors: ["Dr. Arjun Dev", "Dr. Priya Ramesh"] }
+};
+
+const hospitalData = {
+  "General": [
+    { name: "BeWell City Hospital", beds: 4 },
+    { name: "Metro Care", beds: 7 },
+    { name: "Lifeline Multispeciality", beds: 6 }
+  ],
+  "Cardiology": [
+    { name: "HeartLine Center", beds: 5 },
+    { name: "Apollo Cardiac", beds: 2 }
+  ],
+  "Dermatology": [
+    { name: "SkinCure Hospital", beds: 2 },
+    { name: "DermaPlus Clinic", beds: 1 }
+  ],
+  "Gastroenterology": [
+    { name: "GastroCare Institute", beds: 4 },
+    { name: "GI Hospital", beds: 3 }
+  ],
+  "Orthopedic": [
+    { name: "OrthoLife Hospital", beds: 5 },
+    { name: "BoneCare Center", beds: 2 }
+  ],
+  "Pulmonology": [
+    { name: "BreatheWell Clinic", beds: 3 },
+    { name: "LungCare Hospital", beds: 2 }
+  ],
+  "Neurology": [
+    { name: "NeuroAid Center", beds: 3 },
+    { name: "BrainTrust Hospital", beds: 2 }
+  ],
+  "ENT": [
+    { name: "SoundCare Clinic", beds: 2 },
+    { name: "EarNoseThroat Hospital", beds: 1 }
+  ],
+  "Dentistry": [
+    { name: "BrightSmile Dental", beds: 2 },
+    { name: "ToothCare Hospital", beds: 1 }
+  ],
+  "Plastic Surgery": [
+    { name: "Restore Aesthetics", beds: 1 },
+    { name: "BurnCare Hospital", beds: 1 }
+  ],
+  "Infectious Disease": [
+    { name: "InfectoMed", beds: 2 },
+    { name: "Pathogen Hospital", beds: 2 }
+  ]
+};
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
